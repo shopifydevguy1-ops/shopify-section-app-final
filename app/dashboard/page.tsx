@@ -144,7 +144,7 @@ export default function DashboardPage() {
             <CardHeader>
               <CardTitle className="text-3xl">Section Generator</CardTitle>
               <CardDescription>
-                Describe the section you want to create (e.g., "hero banner", "testimonial", "product grid")
+                Describe the section you want to create (e.g., &quot;hero banner&quot;, &quot;testimonial&quot;, &quot;product grid&quot;)
               </CardDescription>
             </CardHeader>
             <CardContent>

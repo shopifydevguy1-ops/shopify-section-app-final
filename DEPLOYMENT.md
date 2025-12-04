@@ -26,7 +26,169 @@ npm start
 
 ### 2. Configure Environment Variables
 
-In your Z.com hosting panel, set the following environment variables:
+Z.com uses cPanel, and setting environment variables for Node.js/Next.js applications can be done through several methods. Try these options in order:
+
+#### Method 1: Node.js Application Manager (Recommended)
+
+1. **Navigate to Node.js Application Manager**
+   - In your cPanel dashboard, look for **"Node.js"** or **"Node.js App"** section
+   - Click on **"+ CREATE APPLICATION"** or edit an existing application
+
+2. **Configure Application Settings**
+   - **Node.js version**: Select 18.x or higher (recommended: latest LTS version)
+   - **Application mode**: Select "Production"
+   - **Application root**: Enter the path to your application (e.g., `/home/azwywnto/repositories/shopify-section-app`)
+     - ⚠️ **Important**: The path must NOT contain spaces. If you see an error "Directory should not contain spaces", check your path carefully
+   - **Application URL**: Enter your domain (e.g., `shopifysectiongen.com`)
+   - **Application startup file**: 
+     - For Next.js, you may need to create a `server.js` file, or the system might handle `npm start` automatically
+     - If using `server.js`, create it in your app root with:
+       ```javascript
+       const { createServer } = require('http')
+       const { parse } = require('url')
+       const next = require('next')
+       
+       const dev = process.env.NODE_ENV !== 'production'
+       const hostname = 'localhost'
+       const port = process.env.PORT || 3000
+       
+       const app = next({ dev, hostname, port })
+       const handle = app.getRequestHandler()
+       
+       app.prepare().then(() => {
+         createServer(async (req, res) => {
+           try {
+             const parsedUrl = parse(req.url, true)
+             await handle(req, res, parsedUrl)
+           } catch (err) {
+             console.error('Error occurred handling', req.url, err)
+             res.statusCode = 500
+             res.end('internal server error')
+           }
+         }).listen(port, (err) => {
+           if (err) throw err
+           console.log(`> Ready on http://${hostname}:${port}`)
+         })
+       })
+       ```
+     - Alternatively, some Node.js managers allow you to specify `npm start` as the command
+
+3. **Set Environment Variables**
+   - Scroll down to the **"Environment variables"** section
+   - Click **"+ ADD VARIABLE"** button for each variable you need to add
+   - Add the following variables (click "DONE" after each one):
+     
+     **Required Variables:**
+     - `DATABASE_URL` = `postgresql://azwywnto_kram:YOUR_PASSWORD@localhost:5432/azwywnto_shopify_section_generator`
+       - ⚠️ **Important**: Make sure the full connection string is entered (it appears your current one might be cut off)
+       - Replace `YOUR_PASSWORD` with your actual database password
+       - URL-encode special characters in the password if needed
+     
+     - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` = `pk_live_...` (your Clerk publishable key)
+     - `CLERK_SECRET_KEY` = `sk_live_...` (your Clerk secret key)
+     - `AI_API_KEY` = `your_api_key` (your AI API key)
+     - `AI_API_URL` = `https://api.openai.com/v1/chat/completions`
+     - `AI_MODEL` = `gpt-3.5-turbo`
+     - `PAYMONGO_SECRET_KEY` = `sk_live_...` (your PayMongo secret key)
+     - `PAYMONGO_PUBLIC_KEY` = `pk_live_...` (your PayMongo public key)
+     - `NEXT_PUBLIC_APP_URL` = `https://shopifysectiongen.com` (your production URL)
+     - `NODE_ENV` = `production` (this is usually set automatically by "Production" mode)
+
+4. **Fix Common Issues**
+   
+   **Error: "Directory should not contain spaces"**
+   - This error appears if your application root path contains spaces
+   - **Solution**: 
+     1. Check your path: `/home/azwywnto/repositories/shopify-section-app` ✅ (no spaces)
+     2. If you see spaces, remove them or use hyphens/underscores
+     3. Make sure the directory actually exists at that path
+     4. Try refreshing the page and re-entering the path
+     5. If the error persists, the directory might not exist yet - create it first via File Manager
+   
+   **Incomplete DATABASE_URL**
+   - Your DATABASE_URL appears to be cut off: `postgresql://azwywnto_kram:Zaiza`
+   - **Solution**: 
+     1. Click on the DATABASE_URL row to edit it
+     2. Enter the complete connection string:
+        ```
+        postgresql://azwywnto_kram:YOUR_PASSWORD@localhost:5432/azwywnto_shopify_section_generator
+        ```
+     3. Replace `YOUR_PASSWORD` with your actual database password
+     4. Make sure the entire string is visible and not truncated
+     5. Click "DONE" to save
+   
+   **Variables not saving**
+   - Click "DONE" after entering each variable (don't just click away)
+   - Make sure there are no special characters that need URL-encoding in values
+   - If a value contains `@`, `#`, `$`, etc., URL-encode them (e.g., `@` becomes `%40`)
+   
+   **Missing Environment Variables**
+   - Make sure you add ALL required variables listed above
+   - Don't forget `NEXT_PUBLIC_` prefix for variables that need to be accessible in the browser
+
+5. **Create the Application**
+   - Review all settings and environment variables
+   - Click the **"CREATE"** button (top right)
+   - Wait for the application to be created and started
+
+#### Method 2: Using .env File (Alternative)
+
+If Application Manager is not available, you can create a `.env` file in your project root:
+
+1. **Access File Manager**
+   - In cPanel, click on **"File Manager"**
+   - Navigate to your application's root directory (usually `public_html` or your domain folder)
+
+2. **Create .env File**
+   - Click **"New File"** or **"Create File"**
+   - Name it `.env` (with the dot at the beginning)
+   - Open the file for editing
+
+3. **Add Environment Variables**
+   - Add the following content (replace with your actual values):
+     ```
+     DATABASE_URL=postgresql://user:password@host:5432/database
+     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
+     CLERK_SECRET_KEY=sk_live_...
+     AI_API_KEY=your_api_key
+     AI_API_URL=https://api.openai.com/v1/chat/completions
+     AI_MODEL=gpt-3.5-turbo
+     PAYMONGO_SECRET_KEY=sk_live_...
+     PAYMONGO_PUBLIC_KEY=pk_live_...
+     NEXT_PUBLIC_APP_URL=https://yourdomain.com
+     NODE_ENV=production
+     ```
+   - Save the file
+
+4. **Set File Permissions**
+   - Right-click on `.env` file → **"Change Permissions"**
+   - Set permissions to `600` (read/write for owner only) for security
+   - This prevents others from reading your sensitive data
+
+#### Method 3: Using SSH (If you have SSH access)
+
+1. **Connect via SSH**
+   - Use an SSH client to connect to your server
+   - Navigate to your application directory
+
+2. **Create .env File**
+   ```bash
+   cd ~/public_html  # or your app directory
+   nano .env
+   ```
+
+3. **Add Environment Variables**
+   - Add all the variables as shown in Method 2
+   - Save and exit (Ctrl+X, then Y, then Enter)
+
+4. **Set Permissions**
+   ```bash
+   chmod 600 .env
+   ```
+
+#### Required Environment Variables
+
+Regardless of which method you use, you need to set these variables:
 
 ```
 DATABASE_URL=postgresql://user:password@host:5432/database
@@ -40,6 +202,13 @@ PAYMONGO_PUBLIC_KEY=pk_live_...
 NEXT_PUBLIC_APP_URL=https://yourdomain.com
 NODE_ENV=production
 ```
+
+#### Troubleshooting
+
+- **Can't find Application Manager**: Your hosting plan might not include Node.js support. Contact Z.com support to enable it or use Method 2 (.env file)
+- **.env file not working**: Make sure the file is in the root directory where your `package.json` is located
+- **Variables not loading**: Restart your Node.js application after setting environment variables
+- **Still having issues**: Contact Z.com support and ask about setting environment variables for Node.js/Next.js applications
 
 ### 3. Database Setup
 
@@ -175,7 +344,9 @@ NODE_ENV=production
    - [ ] Port: `5432` (default, or check "Remote Database Access")
 
 8. **Update Environment Variables**
-   - In your Z.com hosting panel, set the `DATABASE_URL` environment variable with the connection string
+   - Use one of the methods described in Step 2 (Application Manager, .env file, or SSH)
+   - Set the `DATABASE_URL` environment variable with your connection string
+   - Example: `DATABASE_URL=postgresql://azwywnto_kram:YOUR_PASSWORD@localhost:5432/azwywnto_shopify_section_generator`
 
 9. **Run Migrations**
    ```bash
