@@ -2,14 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/azwywnto/repositories/shopify-section-app
-    - export TMPDIR=/tmp/cpanel-deploy-$$
-    - mkdir -p $TMPDIR
-    - /bin/cp -R $DEPLOYPATH/* $TMPDIR/ 2>/dev/null || true
-    - cd $DEPLOYPATH && sh -c 'for f in .*; do [ "$f" != "." ] && [ "$f" != ".." ] && [ -e "$f" ] && /bin/cp -R "$f" $TMPDIR/ 2>/dev/null || true; done'
-    - cd $TMPDIR
+    - cd $DEPLOYPATH
     - /usr/local/bin/npm install --production=false
     - /usr/local/bin/npx prisma generate
     - /usr/local/bin/npm run build
-    - cd $TMPDIR && /bin/tar --exclude='.git' --exclude='.gitignore' --exclude='.env' --exclude='.env.*' -cf - . | (cd $DEPLOYPATH && /bin/tar -xf -) || true
-    - cd $DEPLOYPATH
-    - rm -rf $TMPDIR
