@@ -1,0 +1,6 @@
+# Sections Folder
+
+Place your section templates here in either:
+- JSON format: `{ "name": "...", "tags": [...], "content": "..." }`
+- Liquid format: `.liquid` files with template code
+

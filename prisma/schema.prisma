@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  clerkUserId      String    @unique
+  email            String
+  subscriptionType String    @default("free") // "free" | "pro"
+  generationCount  Int       @default(0)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  
+  generationLogs   GenerationLog[]
+  subscriptions    SubscriptionHistory[]
+  
+  @@index([clerkUserId])
+  @@index([email])
+}
+
+model Section {
+  id        String   @id @default(cuid())
+  name      String
+  tags      String[] // Array of tags like ["hero", "banner", "testimonial"]
+  content   String   @db.Text // The .liquid template content
+  addedBy   String   // Admin clerkUserId who added this
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  generationLogs GenerationLog[]
+  
+  @@index([tags])
+}
+
+model GenerationLog {
+  id        String   @id @default(cuid())
+  userId    String
+  sectionId String?
+  keyword   String
+  timestamp DateTime @default(now())
+  
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  section   Section? @relation(fields: [sectionId], references: [id], onDelete: SetNull)
+  
+  @@index([userId])
+  @@index([timestamp])
+}
+
+model SubscriptionHistory {
+  id                    String   @id @default(cuid())
+  userId                String
+  paymongoSubscriptionId String? @unique
+  status                String   // "active" | "cancelled" | "expired" | "pending"
+  amount                Float
+  createdAt             DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([paymongoSubscriptionId])
+  @@index([status])
+}
+
