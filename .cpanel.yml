@@ -1,14 +1,8 @@
 ---
 deployment:
   tasks:
-    - export REPOPATH=/home/azwywnto/repositories/shopify-section-app
-    - export APPPATH=/home/azwywnto/apps/shopifysectiongen
-    - cd $REPOPATH
+    - export DEPLOYPATH=/home/azwywnto/repositories/shopify-section-app-final
+    - cd $DEPLOYPATH
     - npm install --production=false
     - npx prisma generate
     - npm run build
-    - /bin/rm -rf $APPPATH/standalone-app
-    - /bin/mkdir -p $APPPATH
-    - /bin/cp -R $REPOPATH/.next/standalone $APPPATH/standalone-app
-    - /bin/cp -R $REPOPATH/public $APPPATH/standalone-app/public 2>/dev/null || true
-    - /bin/cp -R $REPOPATH/.next/static $APPPATH/standalone-app/.next/static 2>/dev/null || true
