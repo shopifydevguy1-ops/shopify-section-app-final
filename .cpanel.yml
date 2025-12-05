@@ -1,6 +1,6 @@
----
 deployment:
   tasks:
-    - cd /home/azwywnto/repositories/shopify-section-app-final && npm install --production=false
-    - cd /home/azwywnto/repositories/shopify-section-app-final && npx prisma generate
-    - cd /home/azwywnto/repositories/shopify-section-app-final && npm run build
+    - export DEPLOYPATH=/home/azwywnto/repositories/shopify-section-app-final
+    - cd $DEPLOYPATH && npm install --production=false
+    - cd $DEPLOYPATH && npx prisma generate
+    - cd $DEPLOYPATH && npm run build
