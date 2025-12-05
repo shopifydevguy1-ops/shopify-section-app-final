@@ -2,7 +2,7 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/azwywnto/repositories/shopify-section-app-final
-    - cd $DEPLOYPATH
-    - npm install --production=false
-    - npx prisma generate
-    - npm run build
+    - export REPOPATH=/home/azwywnto/repositories/shopify-section-app-final
+    - /bin/sh -c "cd $REPOPATH && if [ ! -d 'node_modules' ] || [ 'package-lock.json' -nt 'node_modules' ] || [ 'package.json' -nt 'node_modules' ]; then npm ci --prefer-offline --no-audit --progress=false --silent || npm install --production=false --prefer-offline --no-audit --progress=false --silent; fi"
+    - /bin/sh -c "cd $REPOPATH && npx prisma generate"
+    - /bin/sh -c "cd $REPOPATH && npm run build"
