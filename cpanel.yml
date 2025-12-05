@@ -70,7 +70,7 @@ port:
 root:
   # Update this to your actual application path on Z.com
   # This is typically set in cPanel Node.js Application Manager
-  path: "/home/azwywnto/repositories/shopify-section-app"
+  path: "/home/azwywnto/repositories/shopify-section-app-final"
   # ⚠️ Make sure the path has no spaces!
 
 # Application URL
