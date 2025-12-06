@@ -16,6 +16,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // ClerkProvider will automatically use NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY from env
+  // If missing, it will show warnings but won't crash the app
   return (
     <ClerkProvider>
       <html lang="en">

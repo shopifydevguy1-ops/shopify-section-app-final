@@ -2,29 +2,40 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { prisma } from './db'
 
 export async function getCurrentUser() {
-  const { userId } = await auth()
-  if (!userId) return null
+  try {
+    const { userId } = await auth()
+    if (!userId) return null
 
-  const clerkUser = await currentUser()
-  if (!clerkUser) return null
+    const clerkUser = await currentUser()
+    if (!clerkUser) return null
 
-  // Get or create user in database
-  let user = await prisma.user.findUnique({
-    where: { clerkUserId: userId },
-  })
-
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        clerkUserId: userId,
-        email: clerkUser.emailAddresses[0]?.emailAddress || '',
-        subscriptionType: 'free',
-        generationCount: 0,
-      },
+    // Get or create user in database
+    let user = await prisma.user.findUnique({
+      where: { clerkUserId: userId },
     })
-  }
 
-  return user
+    if (!user) {
+      try {
+        user = await prisma.user.create({
+          data: {
+            clerkUserId: userId,
+            email: clerkUser.emailAddresses[0]?.emailAddress || '',
+            subscriptionType: 'free',
+            generationCount: 0,
+          },
+        })
+      } catch (error: any) {
+        console.error('Error creating user:', error)
+        // If database is unavailable, return null instead of crashing
+        return null
+      }
+    }
+
+    return user
+  } catch (error) {
+    console.error('Error in getCurrentUser:', error)
+    return null
+  }
 }
 
 export async function isAdmin() {
@@ -36,33 +47,44 @@ export async function isAdmin() {
 }
 
 export async function checkGenerationLimit(userId: string): Promise<{ allowed: boolean; remaining: number }> {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  })
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    })
 
-  if (!user) {
+    if (!user) {
+      return { allowed: false, remaining: 0 }
+    }
+
+    if (user.subscriptionType === 'pro') {
+      return { allowed: true, remaining: -1 } // -1 means unlimited
+    }
+
+    const remaining = 10 - user.generationCount
+    return {
+      allowed: remaining > 0,
+      remaining: Math.max(0, remaining),
+    }
+  } catch (error) {
+    console.error('Error checking generation limit:', error)
+    // If database is unavailable, deny access to be safe
     return { allowed: false, remaining: 0 }
-  }
-
-  if (user.subscriptionType === 'pro') {
-    return { allowed: true, remaining: -1 } // -1 means unlimited
-  }
-
-  const remaining = 10 - user.generationCount
-  return {
-    allowed: remaining > 0,
-    remaining: Math.max(0, remaining),
   }
 }
 
 export async function incrementGenerationCount(userId: string) {
-  await prisma.user.update({
-    where: { id: userId },
-    data: {
-      generationCount: {
-        increment: 1,
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        generationCount: {
+          increment: 1,
+        },
       },
-    },
-  })
+    })
+  } catch (error) {
+    console.error('Error incrementing generation count:', error)
+    // Don't throw - allow the generation to proceed even if count update fails
+  }
 }
 
