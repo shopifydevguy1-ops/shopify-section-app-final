@@ -1,2 +1,3 @@
-sections/**/*.liquid
+sections/**
+!sections/*.json
 section-library/**

@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Keep the large optional section library out of serverless function bundles.
   outputFileTracingExcludes: {
     "*": [
-      "./sections/**/*.liquid",
+      "./sections/**/*",
       "./section-library/**/*",
+      "./data/**/*.png",
+      "./data/**/*.jpg",
+      "./data/**/*.webp",
     ],
   },
 }
