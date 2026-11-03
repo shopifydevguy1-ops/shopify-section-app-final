@@ -6,8 +6,12 @@ import { Toaster } from "@/components/ui/toaster"
 const outfit = Outfit({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "SectionGen — Free Shopify section studio",
+  title: "Shopify Section Generator",
   description: "Generate Shopify Liquid sections for free, with no account. Each section gets an image composed from the photos you upload.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 }
 
 export default function RootLayout({

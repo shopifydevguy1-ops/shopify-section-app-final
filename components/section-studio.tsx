@@ -276,11 +276,15 @@ export function SectionStudio() {
       <AuraBackground />
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-100/15 bg-amber-300/10 shadow-[0_0_30px_rgba(250,204,21,0.28)]">
-            <Sparkles className="h-5 w-5 text-amber-200" />
-          </span>
+          <img
+            src="/logo.svg"
+            alt="Shopify Section Generator"
+            width={40}
+            height={40}
+            className="h-10 w-10"
+          />
           <div>
-            <p className="text-sm font-semibold tracking-tight">SectionGen</p>
+            <p className="text-sm font-semibold tracking-tight">Shopify Section Generator</p>
             <p className="text-xs text-white/50">shopifysectiongen.com</p>
           </div>
         </div>
@@ -292,10 +296,6 @@ export function SectionStudio() {
 
       <main className="mx-auto max-w-6xl px-4 pb-20">
         <section className="mb-10 max-w-3xl">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-100/10 bg-amber-50/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-amber-200">
-            <Wand2 className="h-3.5 w-3.5" />
-            Aura studio
-          </p>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
             <span className="block">Generate Shopify sections</span>
             <span className="mt-1 block bg-gradient-to-r from-amber-200 via-yellow-200 to-orange-300 bg-clip-text text-transparent">
