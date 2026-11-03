@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { prisma } from './db'
 
 export interface SectionTemplate {
   name: string
@@ -49,18 +48,30 @@ export async function loadSectionsFromFolder(): Promise<SectionTemplate[]> {
 }
 
 // Search sections by keyword
-export async function searchSections(keyword: string): Promise<SectionTemplate[]> {
-  // First, try to find in database
-  const dbSections = await prisma.section.findMany({
-    where: {
-      OR: [
-        { name: { contains: keyword, mode: 'insensitive' } },
-        { tags: { has: keyword.toLowerCase() } },
-      ],
-    },
-  })
+async function withDatabase<T>(read: (prisma: import('@prisma/client').PrismaClient) => Promise<T>) {
+  if (!process.env.DATABASE_URL) return null
+  try {
+    const { prisma } = await import('./db')
+    return await read(prisma)
+  } catch (error) {
+    console.error('Database unavailable:', error)
+    return null
+  }
+}
 
-  if (dbSections.length > 0) {
+export async function searchSections(keyword: string): Promise<SectionTemplate[]> {
+  const dbSections = await withDatabase((prisma) =>
+    prisma.section.findMany({
+      where: {
+        OR: [
+          { name: { contains: keyword, mode: 'insensitive' } },
+          { tags: { has: keyword.toLowerCase() } },
+        ],
+      },
+    })
+  )
+
+  if (dbSections && dbSections.length > 0) {
     return dbSections.map(s => ({
       name: s.name,
       tags: s.tags,
@@ -80,11 +91,13 @@ export async function searchSections(keyword: string): Promise<SectionTemplate[]
 
 // Get all sections
 export async function getAllSections(): Promise<SectionTemplate[]> {
-  const dbSections = await prisma.section.findMany({
-    orderBy: { createdAt: 'desc' },
-  })
+  const dbSections = await withDatabase((prisma) =>
+    prisma.section.findMany({
+      orderBy: { createdAt: 'desc' },
+    })
+  )
 
-  if (dbSections.length > 0) {
+  if (dbSections && dbSections.length > 0) {
     return dbSections.map(s => ({
       name: s.name,
       tags: s.tags,

@@ -1,14 +1,13 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Outfit } from "next/font/google"
 import "./globals.css"
-import { ClerkProvider } from "@clerk/nextjs"
 import { Toaster } from "@/components/ui/toaster"
 
-const inter = Inter({ subsets: ["latin"] })
+const outfit = Outfit({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Shopify Section Generator - AI-Powered Section Builder",
-  description: "Generate beautiful Shopify sections with AI. Free plan available, Pro plan for unlimited generations.",
+  title: "SectionGen — Free Shopify section studio",
+  description: "Generate Shopify Liquid sections for free, with no account. Each section gets an image composed from the photos you upload.",
 }
 
 export default function RootLayout({
@@ -16,17 +15,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  // ClerkProvider will automatically use NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY from env
-  // If missing, it will show warnings but won't crash the app
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          {children}
-          <Toaster />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark">
+      <body className={`${outfit.className} antialiased`}>
+        {children}
+        <Toaster />
+      </body>
+    </html>
   )
 }
-

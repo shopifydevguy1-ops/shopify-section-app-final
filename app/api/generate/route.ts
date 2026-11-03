@@ -1,73 +1,46 @@
 import { NextResponse } from "next/server"
-import { getCurrentUser, checkGenerationLimit, incrementGenerationCount } from "@/lib/auth"
-import { searchSections } from "@/lib/sections"
 import { generateSectionCode } from "@/lib/ai"
-import { prisma } from "@/lib/db"
+import { buildFallbackSection } from "@/lib/fallback-section"
+import { searchSections } from "@/lib/sections"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
 export async function POST(request: Request) {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    const body = await request.json()
+    const keyword = typeof body.keyword === "string" ? body.keyword.trim().slice(0, 120) : ""
+    const customizations = typeof body.customizations === "string" ? body.customizations.slice(0, 2000) : ""
+    const imageCount = Number.isFinite(body.imageCount) ? Math.max(0, Math.min(8, Number(body.imageCount))) : 0
+
+    if (!keyword) {
+      return NextResponse.json({ error: "Keyword is required" }, { status: 400 })
     }
 
-    // Check generation limit
-    const limit = await checkGenerationLimit(user.id)
-    if (!limit.allowed) {
-      return NextResponse.json(
-        { error: "Generation limit reached. Please upgrade to Pro." },
-        { status: 403 }
-      )
+    let sectionTemplate: string | undefined
+    try {
+      const matchingSections = await searchSections(keyword)
+      sectionTemplate = matchingSections[0]?.content
+    } catch (error) {
+      console.error("Template lookup skipped:", error)
     }
 
-    const { keyword, customizations } = await request.json()
-
-    if (!keyword || typeof keyword !== "string") {
-      return NextResponse.json(
-        { error: "Keyword is required" },
-        { status: 400 }
-      )
-    }
-
-    // Search for matching sections
-    const matchingSections = await searchSections(keyword)
-    const sectionTemplate = matchingSections[0]?.content
-
-    // Generate code using AI
-    const generatedCode = await generateSectionCode({
-      keyword,
-      sectionTemplate,
-      customizations,
-    })
-
-    // Find or create section record
-    let section = matchingSections[0]
-      ? await prisma.section.findFirst({
-          where: { name: matchingSections[0].name },
-        })
-      : null
-
-    // Log generation
-    await prisma.generationLog.create({
-      data: {
-        userId: user.id,
-        sectionId: section?.id,
+    try {
+      const code = await generateSectionCode({
         keyword,
-      },
-    })
-
-    // Increment generation count
-    await incrementGenerationCount(user.id)
-
-    return NextResponse.json({ code: generatedCode })
-  } catch (error: any) {
+        sectionTemplate,
+        customizations,
+        imageCount,
+      })
+      return NextResponse.json({ code, source: "ai" })
+    } catch (error) {
+      console.error("AI generation failed, using built-in template:", error)
+      return NextResponse.json({
+        code: buildFallbackSection(keyword, customizations),
+        source: "template",
+      })
+    }
+  } catch (error) {
     console.error("Generation error:", error)
-    return NextResponse.json(
-      { error: error.message || "Failed to generate section" },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: "Failed to generate section" }, { status: 500 })
   }
 }
-
