@@ -5,10 +5,10 @@ export type ReferenceImage = {
 }
 
 const ABSTRACT = [
-  ["#7c3aed", "#22d3ee"],
-  ["#ec4899", "#818cf8"],
-  ["#14b8a6", "#a855f7"],
-  ["#fb7185", "#6366f1"],
+  ["#f59e0b", "#fde68a"],
+  ["#fb923c", "#facc15"],
+  ["#eab308", "#fdba74"],
+  ["#f97316", "#fef08a"],
 ]
 
 function loadImage(src: string) {
@@ -65,7 +65,7 @@ function sampleColors(image: HTMLImageElement) {
     if (max - min < 18 || max < 28) continue
     colors.push(`rgb(${red}, ${green}, ${blue})`)
   }
-  return colors.length > 0 ? colors : ["#7c3aed", "#ec4899", "#22d3ee"]
+  return colors.length > 0 ? colors : ["#f59e0b", "#fb923c", "#fde68a"]
 }
 
 function drawCover(
@@ -187,8 +187,8 @@ export async function composeSectionImage(sources: string[], index: number) {
   }
 
   const wash = context.createLinearGradient(0, 0, width, height)
-  wash.addColorStop(0, palette[index % palette.length] || "#7c3aed")
-  wash.addColorStop(1, palette[(index + 3) % palette.length] || "#22d3ee")
+  wash.addColorStop(0, palette[index % palette.length] || "#f59e0b")
+  wash.addColorStop(1, palette[(index + 3) % palette.length] || "#fde68a")
   context.save()
   context.globalCompositeOperation = "soft-light"
   context.globalAlpha = 0.55

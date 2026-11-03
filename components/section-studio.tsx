@@ -21,6 +21,8 @@ import {
   Zap,
 } from "lucide-react"
 import { AuraBackground } from "@/components/aura-background"
+import { InstallGuide } from "@/components/install-guide"
+import { InspirationBoard } from "@/components/inspiration-board"
 import { SpotlightCard } from "@/components/spotlight-card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -53,7 +55,7 @@ type SectionResult = {
 }
 
 const fieldClass =
-  "border-white/10 bg-white/[0.04] text-white placeholder:text-white/35 focus-visible:ring-violet-400/70 focus-visible:ring-offset-0"
+  "border-amber-100/10 bg-white/[0.04] text-white placeholder:text-white/35 focus-visible:ring-amber-300/70 focus-visible:ring-offset-0"
 
 export function SectionStudio() {
   const { toast } = useToast()
@@ -274,34 +276,34 @@ export function SectionStudio() {
       <AuraBackground />
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6">
         <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-white/15 bg-white/10 shadow-[0_0_30px_rgba(167,139,250,0.35)]">
-            <Sparkles className="h-5 w-5 text-violet-200" />
+          <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-amber-100/15 bg-amber-300/10 shadow-[0_0_30px_rgba(250,204,21,0.28)]">
+            <Sparkles className="h-5 w-5 text-amber-200" />
           </span>
           <div>
             <p className="text-sm font-semibold tracking-tight">SectionGen</p>
-            <p className="text-xs text-white/50">Shopify section studio</p>
+            <p className="text-xs text-white/50">shopifysectiongen.com</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-white/70">
-          <Zap className="h-3.5 w-3.5 text-cyan-300" />
+        <div className="flex items-center gap-2 rounded-full border border-amber-100/10 bg-amber-50/5 px-3 py-1.5 text-xs text-white/70">
+          <Zap className="h-3.5 w-3.5 text-amber-300" />
           Free · no login
         </div>
       </header>
 
       <main className="mx-auto max-w-6xl px-4 pb-20">
         <section className="mb-10 max-w-3xl">
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-violet-200">
+          <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-100/10 bg-amber-50/5 px-3 py-1 text-xs uppercase tracking-[0.18em] text-amber-200">
             <Wand2 className="h-3.5 w-3.5" />
             Aura studio
           </p>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-6xl">
             <span className="block">Generate Shopify sections</span>
-            <span className="mt-1 block bg-gradient-to-r from-violet-200 via-fuchsia-200 to-cyan-200 bg-clip-text text-transparent">
+            <span className="mt-1 block bg-gradient-to-r from-amber-200 via-yellow-200 to-orange-300 bg-clip-text text-transparent">
               with a photo for each one
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/65 sm:text-lg">
-            Unlimited, and no account. Upload the images you already have. Every section gets its own picture, composed from that set.
+            Unlimited, and no account. Upload the images you already have. Every section gets its own picture, composed from that set. Share your finished sections or full pages below to help keep the studio free.
           </p>
         </section>
 
@@ -311,7 +313,7 @@ export function SectionStudio() {
               <SpotlightCard className="aura-frame-inner">
                 <div className="space-y-5 p-5 sm:p-6">
                   <div className="flex items-center gap-2 text-sm font-medium text-white/80">
-                    <Wand2 className="h-4 w-4 text-fuchsia-300" />
+                    <Wand2 className="h-4 w-4 text-amber-300" />
                     What should we build?
                   </div>
                   <Input
@@ -336,8 +338,8 @@ export function SectionStudio() {
                           onClick={() => togglePreset(preset.id)}
                           className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition ${
                             active
-                              ? "border-transparent bg-gradient-to-r from-violet-500/90 to-fuchsia-500/90 text-white shadow-[0_0_24px_rgba(168,85,247,0.35)]"
-                              : "border-white/10 bg-white/[0.03] text-white/70 hover:border-white/25 hover:text-white"
+                              ? "border-transparent bg-gradient-to-r from-amber-400 to-orange-400 text-[#1a1205] shadow-[0_0_24px_rgba(250,204,21,0.28)]"
+                              : "border-amber-100/10 bg-white/[0.03] text-white/70 hover:border-amber-100/25 hover:text-white"
                           }`}
                         >
                           <Icon className="h-3.5 w-3.5" />
@@ -358,9 +360,9 @@ export function SectionStudio() {
                     type="button"
                     onClick={handleGenerate}
                     disabled={loading || queued.length === 0}
-                    className="relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-cyan-400 px-6 text-sm font-semibold text-white shadow-[0_0_40px_rgba(168,85,247,0.35)] transition disabled:cursor-not-allowed disabled:opacity-50"
+                    className="relative inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-amber-300 via-yellow-300 to-orange-400 px-6 text-sm font-semibold text-[#1a1205] shadow-[0_0_40px_rgba(250,204,21,0.28)] transition disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    <span className="pointer-events-none absolute inset-0 animate-shimmer bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.35),transparent)] bg-[length:200%_100%]" />
+                    <span className="pointer-events-none absolute inset-0 animate-shimmer bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.45),transparent)] bg-[length:200%_100%]" />
                     <span className="relative inline-flex items-center gap-2">
                       {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                       {loading ? status || "Generating" : queued.length > 1 ? `Generate ${queued.length} sections` : "Generate section"}
@@ -375,7 +377,7 @@ export function SectionStudio() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="flex items-center gap-2 text-sm font-medium">
-                      <ImagePlus className="h-4 w-4 text-cyan-300" />
+                      <ImagePlus className="h-4 w-4 text-amber-300" />
                       Reference images
                     </div>
                     <p className="mt-1 text-sm text-white/55">
@@ -397,7 +399,7 @@ export function SectionStudio() {
                     if (event.dataTransfer.files) addFiles(event.dataTransfer.files)
                   }}
                   className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-dashed px-4 py-8 text-center transition ${
-                    dragging ? "border-cyan-300/70 bg-cyan-300/10" : "border-white/15 bg-white/[0.03] hover:border-white/30"
+                    dragging ? "border-amber-300/70 bg-amber-300/10" : "border-amber-100/15 bg-white/[0.03] hover:border-amber-200/30"
                   }`}
                 >
                   <ImagePlus className="mb-3 h-6 w-6 text-white/70" />
@@ -419,7 +421,7 @@ export function SectionStudio() {
                 {images.length > 0 && (
                   <ul className="grid grid-cols-4 gap-2">
                     {images.map((image) => (
-                      <li key={image.id} className="group relative aspect-square overflow-hidden rounded-xl border border-white/10">
+                      <li key={image.id} className="group relative aspect-square overflow-hidden rounded-xl border border-amber-100/10">
                         <img src={image.dataUrl} alt={image.name} className="h-full w-full object-cover" />
                         <button
                           type="button"
@@ -443,7 +445,7 @@ export function SectionStudio() {
                 <div>
                   <h2 className="text-lg font-semibold">Sections</h2>
                   <p className="text-sm text-white/55">
-                    Download the Liquid file and the matching image, then assign that image in the theme editor.
+                    Download the Liquid file and the matching image, then follow the install steps below.
                   </p>
                 </div>
                 {results.length > 0 && (
@@ -452,7 +454,7 @@ export function SectionStudio() {
                     variant="outline"
                     onClick={rebuildImages}
                     disabled={loading}
-                    className="border-white/15 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                    className="border-amber-100/15 bg-transparent text-white hover:bg-amber-50/10 hover:text-white"
                   >
                     <ImagePlus className="mr-2 h-4 w-4" />
                     Rebuild images
@@ -461,8 +463,8 @@ export function SectionStudio() {
               </div>
 
               {results.length === 0 ? (
-                <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-white/10 bg-white/[0.02] px-6 text-center">
-                  <Sparkles className="mb-4 h-8 w-8 text-violet-200" />
+                <div className="flex min-h-[420px] flex-col items-center justify-center rounded-2xl border border-dashed border-amber-100/10 bg-white/[0.02] px-6 text-center">
+                  <Sparkles className="mb-4 h-8 w-8 text-amber-200" />
                   <p className="text-base text-white/80">Your sections will show up here.</p>
                   <p className="mt-2 max-w-sm text-sm text-white/45">
                     Pick one or several types. If you have uploaded photos, each result gets a different image made from them.
@@ -476,7 +478,7 @@ export function SectionStudio() {
                       initial={{ opacity: 0, y: 16 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.35, delay: index * 0.04 }}
-                      className="overflow-hidden rounded-2xl border border-white/10 bg-black/20"
+                      className="overflow-hidden rounded-2xl border border-amber-100/10 bg-black/20"
                     >
                       <img
                         src={result.image}
@@ -496,7 +498,7 @@ export function SectionStudio() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="border-white/15 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                            className="border-amber-100/15 bg-transparent text-white hover:bg-amber-50/10 hover:text-white"
                             onClick={() => {
                               navigator.clipboard.writeText(result.code)
                               toast({ title: "Copied", description: "Liquid copied to the clipboard." })
@@ -508,7 +510,7 @@ export function SectionStudio() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="border-white/15 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                            className="border-amber-100/15 bg-transparent text-white hover:bg-amber-50/10 hover:text-white"
                             onClick={() => downloadText(`${slug(result.keyword)}.liquid`, result.code)}
                           >
                             <Download className="mr-2 h-4 w-4" />
@@ -517,7 +519,7 @@ export function SectionStudio() {
                           <Button
                             type="button"
                             variant="outline"
-                            className="border-white/15 bg-transparent text-white hover:bg-white/10 hover:text-white"
+                            className="border-amber-100/15 bg-transparent text-white hover:bg-amber-50/10 hover:text-white"
                             onClick={() => {
                               const link = document.createElement("a")
                               link.href = result.image
@@ -529,7 +531,7 @@ export function SectionStudio() {
                             Image
                           </Button>
                         </div>
-                        <div className="overflow-hidden rounded-xl border border-white/10">
+                        <div className="overflow-hidden rounded-xl border border-amber-100/10">
                           <MonacoEditor
                             height="280px"
                             language="liquid"
@@ -551,6 +553,12 @@ export function SectionStudio() {
             </div>
           </SpotlightCard>
         </div>
+
+        <div className="mt-10">
+          <InstallGuide />
+        </div>
+
+        <InspirationBoard />
       </main>
     </div>
   )

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "seed-hero-warm",
+    "kind": "section",
+    "title": "Warm hero with soft light",
+    "sectionType": "hero banner",
+    "notes": "Use a single lifestyle photo, keep the heading short, and place one CTA under the text.",
+    "storeUrl": "",
+    "imageDataUrl": "",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "seed": true
+  },
+  {
+    "id": "seed-page-home",
+    "kind": "page",
+    "title": "Home page built from four sections",
+    "sectionType": "hero, image with text, testimonials, newsletter",
+    "notes": "Stack a hero, story block, social proof, and newsletter. Share a full-page screenshot so others can copy the rhythm.",
+    "storeUrl": "",
+    "imageDataUrl": "",
+    "createdAt": "2026-11-03T00:00:00.000Z",
+    "seed": true
+  }
+]

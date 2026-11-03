@@ -10,25 +10,25 @@
 
 @layer base {
   :root {
-    --background: 255 32% 4%;
-    --foreground: 260 40% 96%;
-    --card: 255 28% 7%;
-    --card-foreground: 260 40% 96%;
-    --popover: 255 28% 7%;
-    --popover-foreground: 260 40% 96%;
-    --primary: 268 90% 68%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 255 18% 14%;
-    --secondary-foreground: 260 40% 96%;
-    --muted: 255 16% 14%;
-    --muted-foreground: 260 14% 72%;
-    --accent: 255 20% 16%;
-    --accent-foreground: 260 40% 96%;
+    --background: 36 28% 5%;
+    --foreground: 42 40% 96%;
+    --card: 36 24% 7%;
+    --card-foreground: 42 40% 96%;
+    --popover: 36 24% 7%;
+    --popover-foreground: 42 40% 96%;
+    --primary: 42 96% 56%;
+    --primary-foreground: 30 40% 8%;
+    --secondary: 36 16% 14%;
+    --secondary-foreground: 42 40% 96%;
+    --muted: 36 14% 14%;
+    --muted-foreground: 38 14% 72%;
+    --accent: 36 18% 16%;
+    --accent-foreground: 42 40% 96%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 255 16% 18%;
-    --input: 255 16% 18%;
-    --ring: 268 90% 68%;
+    --border: 36 14% 18%;
+    --input: 36 14% 18%;
+    --ring: 42 96% 56%;
     --radius: 0.9rem;
   }
 }
@@ -38,7 +38,7 @@
     @apply border-border;
   }
   body {
-    @apply bg-[#07060d] text-foreground;
+    @apply bg-[#0c0a07] text-foreground;
   }
 }
 
@@ -46,7 +46,7 @@
   position: absolute;
   border-radius: 999px;
   filter: blur(40px);
-  opacity: 0.7;
+  opacity: 0.72;
   will-change: transform;
 }
 
@@ -55,7 +55,7 @@
   left: -6rem;
   height: 28rem;
   width: 28rem;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.85), transparent 68%);
+  background: radial-gradient(circle, rgba(250, 204, 21, 0.72), transparent 68%);
   animation: aura-drift 18s ease-in-out infinite;
 }
 
@@ -64,7 +64,7 @@
   right: -8rem;
   height: 26rem;
   width: 26rem;
-  background: radial-gradient(circle, rgba(34, 211, 238, 0.55), transparent 68%);
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.55), transparent 68%);
   animation: aura-drift 22s ease-in-out infinite reverse;
 }
 
@@ -73,22 +73,22 @@
   left: 30%;
   height: 24rem;
   width: 24rem;
-  background: radial-gradient(circle, rgba(236, 72, 153, 0.55), transparent 68%);
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.45), transparent 68%);
   animation: aura-drift 20s ease-in-out infinite;
 }
 
 .aura-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(255, 236, 179, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 236, 179, 0.05) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at center, black, transparent 75%);
   opacity: 0.45;
 }
 
 .spotlight-card {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 236, 179, 0.12);
+  background: rgba(255, 244, 214, 0.035);
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(18px);
 }
@@ -99,7 +99,7 @@
   inset: 0;
   background: radial-gradient(
     420px circle at var(--spot-x, 50%) var(--spot-y, 0%),
-    rgba(196, 181, 253, 0.2),
+    rgba(250, 204, 21, 0.18),
     transparent 42%
   );
   opacity: 0;
@@ -119,8 +119,8 @@
   background: conic-gradient(
     from var(--beam-angle),
     transparent 0%,
-    rgba(167, 139, 250, 0.95) 12%,
-    rgba(34, 211, 238, 0.8) 20%,
+    rgba(250, 204, 21, 0.95) 12%,
+    rgba(251, 146, 60, 0.85) 20%,
     transparent 34%,
     transparent 100%
   );
@@ -129,7 +129,7 @@
 
 .aura-frame-inner {
   border-radius: calc(1.7rem - 1px);
-  background: rgba(10, 8, 16, 0.78);
+  background: rgba(14, 11, 6, 0.82);
 }
 
 @keyframes aura-drift {

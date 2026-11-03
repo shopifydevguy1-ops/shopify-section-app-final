@@ -70,3 +70,18 @@ model SubscriptionHistory {
   @@index([status])
 }
 
+model Inspiration {
+  id           String   @id @default(cuid())
+  kind         String   // "section" | "page"
+  title        String
+  sectionType  String
+  notes        String   @db.Text
+  storeUrl     String   @default("")
+  imageDataUrl String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([kind])
+  @@index([createdAt])
+}
+
