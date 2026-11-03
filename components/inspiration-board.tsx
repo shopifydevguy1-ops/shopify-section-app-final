@@ -53,7 +53,9 @@ export function InspirationBoard() {
   }
 
   useEffect(() => {
-    loadItems()
+    void loadItems()
+    // Initial gallery fetch only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function onPickImage(fileList: FileList | null) {
