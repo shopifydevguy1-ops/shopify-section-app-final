@@ -93,25 +93,6 @@
   backdrop-filter: blur(18px);
 }
 
-.spotlight-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    420px circle at var(--spot-x, 50%) var(--spot-y, 0%),
-    rgba(250, 204, 21, 0.18),
-    transparent 42%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.spotlight-card:hover::before {
-  opacity: 1;
-}
-
 .aura-frame {
   position: relative;
   border-radius: 1.7rem;

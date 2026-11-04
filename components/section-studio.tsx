@@ -21,6 +21,7 @@ import {
   Zap,
 } from "lucide-react"
 import { AuraBackground } from "@/components/aura-background"
+import { ImageLibrary } from "@/components/image-library"
 import { InstallGuide } from "@/components/install-guide"
 import { InspirationBoard } from "@/components/inspiration-board"
 import { SpotlightCard } from "@/components/spotlight-card"
@@ -29,11 +30,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { useToast } from "@/components/ui/use-toast"
 import { composeSectionImage, compressImageFile, type ReferenceImage } from "@/lib/compose-section-image"
+import type { LibraryImage } from "@/lib/section-library"
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), { ssr: false })
 
 const STORAGE_KEY = "sectiongen.reference-images.v1"
-const MAX_IMAGES = 8
+const MAX_IMAGES = 12
 
 const PRESETS = [
   { id: "hero banner", label: "Hero", icon: Sparkles },
@@ -117,6 +119,31 @@ export function SectionStudio() {
     return items
   }
 
+  function toggleLibraryImage(image: LibraryImage, variant: "desktop" | "mobile") {
+    const url = variant === "mobile" ? image.mobileUrl || image.desktopUrl : image.desktopUrl
+    const existing = images.find((item) => item.dataUrl === url)
+    if (existing) {
+      setImages((current) => current.filter((item) => item.dataUrl !== url))
+      return
+    }
+    if (images.length >= MAX_IMAGES) {
+      toast({
+        title: "Reference set is full",
+        description: `Remove an image first. ${MAX_IMAGES} is the limit.`,
+        variant: "destructive",
+      })
+      return
+    }
+    setImages((current) => [
+      ...current,
+      {
+        id: `${image.id}-${variant}`,
+        name: `${image.label} (${variant})`,
+        dataUrl: url,
+      },
+    ])
+  }
+
   async function addFiles(fileList: FileList | File[]) {
     const files = Array.from(fileList).filter((file) => file.type.startsWith("image/"))
     if (files.length === 0) {
@@ -131,8 +158,8 @@ export function SectionStudio() {
     const room = MAX_IMAGES - images.length
     if (room <= 0) {
       toast({
-        title: "Library is full",
-        description: "Remove an image before adding another. Eight is the limit.",
+        title: "Reference set is full",
+        description: `Remove an image before adding another. ${MAX_IMAGES} is the limit.`,
         variant: "destructive",
       })
       return
@@ -437,6 +464,12 @@ export function SectionStudio() {
                 )}
               </div>
             </SpotlightCard>
+
+            <ImageLibrary
+              selectedUrls={images.map((image) => image.dataUrl)}
+              onToggle={toggleLibraryImage}
+              queryHint={keyword || selected[0] || ""}
+            />
           </div>
 
           <SpotlightCard>

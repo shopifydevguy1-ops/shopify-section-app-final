@@ -4,7 +4,7 @@ const nextConfig = {
   outputFileTracingExcludes: {
     "*": [
       "./sections/**/*",
-      "./section-library/**/*",
+      "./public/section-library/**/*",
       "./data/**/*.png",
       "./data/**/*.jpg",
       "./data/**/*.webp",
