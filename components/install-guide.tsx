@@ -1,13 +1,13 @@
 "use client"
 
-import { BookOpen, CheckCircle2, Download, ImagePlus, Layers3 } from "lucide-react"
+import { BookOpen, CheckCircle2, Download, Layers3 } from "lucide-react"
 import { SpotlightCard } from "@/components/spotlight-card"
 
 const STEPS = [
   {
     icon: Download,
     title: "Download the Liquid file",
-    body: "Use Download Liquid on the section you generated. Keep the matching image too.",
+    body: "Use Download Liquid on the section you generated.",
   },
   {
     icon: Layers3,
@@ -18,11 +18,6 @@ const STEPS = [
     icon: BookOpen,
     title: "Place it on a page",
     body: "Open the theme editor, add section, pick your new section, and drop it where you want it.",
-  },
-  {
-    icon: ImagePlus,
-    title: "Attach the image",
-    body: "In the section settings, open Image and upload the JPG you downloaded from SectionGen.",
   },
 ]
 
@@ -46,7 +41,7 @@ export function InstallGuide() {
             after you generate a section.
           </p>
         </div>
-        <ol className="grid gap-3 sm:grid-cols-2">
+        <ol className="grid gap-3 sm:grid-cols-3">
           {STEPS.map((step, index) => {
             const Icon = step.icon
             return (

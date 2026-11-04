@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server"
-import { findLibraryMatches, listLibraryImages } from "@/lib/section-library"
+import {
+  findLibraryMatches,
+  groupLibraryByCategory,
+  listLibraryImages,
+} from "@/lib/section-library"
 
 export const dynamic = "force-dynamic"
 
@@ -7,14 +11,27 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const q = searchParams.get("q")?.trim() || ""
-    const limit = Math.min(200, Math.max(1, Number(searchParams.get("limit") || 120)))
+    const category = searchParams.get("category")?.trim() || ""
+    const grouped = searchParams.get("grouped") === "1"
+    const limit = Math.min(400, Math.max(1, Number(searchParams.get("limit") || 200)))
 
     const all = listLibraryImages()
-    const items = q ? findLibraryMatches(q, limit) : all.slice(0, limit)
+    let items = q ? findLibraryMatches(q, limit) : all
+
+    if (category && category !== "All") {
+      items = items.filter((image) => image.category.toLowerCase() === category.toLowerCase())
+    }
+
+    if (!q) items = items.slice(0, limit)
 
     return NextResponse.json({
       total: all.length,
       count: items.length,
+      categories: groupLibraryByCategory(all).map((group) => ({
+        category: group.category,
+        count: group.items.length,
+      })),
+      groups: grouped ? groupLibraryByCategory(items) : undefined,
       items,
     })
   } catch (error) {
